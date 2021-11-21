@@ -4,6 +4,9 @@ from tkinter import *
 from tkinter import ttk
 from tkinter import Image
 from tkinter.font import BOLD
+import random,os
+from tkinter import messagebox
+import tempfile
 
 
 class Bill_App:
@@ -15,6 +18,23 @@ class Bill_App:
         # geometry
         root.geometry('1520x790+0+0')
         root.resizable(False, False)
+
+        #========Variables====================#
+        self.bill_no=StringVar()       #bill no.
+        #random no. for bill generater
+        z = random.randint(100,99999)
+        self.bill_no.set(z)
+
+        self.date=StringVar()          #date
+        self.time=StringVar()          #time
+        self.search_bill=StringVar()   #search bill
+        self.product=StringVar()       #item
+        self.product2=StringVar()      #item2
+        self.rate=IntVar()             #rate
+        self.prices=IntVar()           #price
+        self.qty=IntVar()              #quantity
+        self.total=StringVar()         #total
+        #=====================================#
 
         #==============Combobox List==========#
         #main category list
@@ -50,24 +70,25 @@ class Bill_App:
         o_info.place(x=10,y=5,width=350,height=140)
 
         #bill no.
-        self.bill = Label(o_info,text="Bill No.", font=("arial",12,"bold"),bg="white")
+        self.bill = Label(o_info,text="Bill no.", font=("arial",12,"bold"),bg="white")
         self.bill.grid(row=0,column=0,stick=W,padx=5,pady=2)
-        #bill entry
-        self.bill_ent = ttk.Entry(o_info, font=("arial",10),width=24)
-        self.bill_ent.grid(row=0,column=1)
+        #bill no entry
+        self.b_ent = ttk.Entry(o_info, font=("arial",10),textvariable=self.bill_no,width=24)
+        self.b_ent.grid(row=0,column=1)
+
 
         #date
         self.dat_e = Label(o_info,text="Date", font=("arial",12,"bold"),bg="white")
         self.dat_e.grid(row=1,column=0,stick=W,padx=5,pady=2)
         #date entry
-        self.dat_e_ent = ttk.Entry(o_info, font=("arial",10),width=24)
+        self.dat_e_ent = ttk.Entry(o_info, font=("arial",10),textvariable=self.date,width=24)
         self.dat_e_ent.grid(row=1,column=1)
 
         #time
         self.tim_e = Label(o_info,text="Time", font=("arial",12,"bold"),bg="white")
         self.tim_e.grid(row=2,column=0,stick=W,padx=5,pady=2)
         #time entry
-        self.tim_e_ent = ttk.Entry(o_info, font=("arial",10),width=24)
+        self.tim_e_ent = ttk.Entry(o_info, font=("arial",10),textvariable=self.time,width=24)
         self.tim_e_ent.grid(row=2,column=1)
         #======================================#
 
@@ -90,29 +111,39 @@ class Bill_App:
         self.s_cat = Label(i_info,text="Snacks", font=("arial",12,"bold"),bg="white")
         self.s_cat.grid(row=1,column=0,stick=W,padx=5,pady=2)
         #snacks category combobox
-        self.san_com = ttk.Combobox(i_info, font=("arial",10),width=24,state="readonly")
+        self.san_com = ttk.Combobox(i_info, font=("arial",10),textvariable=self.product,width=24,state="readonly")
         self.san_com.grid(row=1,column=1)
+        self.san_com.bind("<<ComboboxSelected>>",self.price)
 
         #drinks category
         self.d_cat = Label(i_info,text="Drinks", font=("arial",12,"bold"),bg="white")
         self.d_cat.grid(row=2,column=0,stick=W,padx=5,pady=2)
-        #snacks category combobox
-        self.dri_com = ttk.Combobox(i_info, font=("arial",10),width=24,state="readonly")
+        #drinks category combobox
+        self.dri_com = ttk.Combobox(i_info, font=("arial",10),textvariable=self.product2,width=24,state="readonly")
         self.dri_com.grid(row=2,column=1)
+        self.dri_com.bind("<<ComboboxSelected>>",self.price)
+        
 
-        #price
-        self.p_cat = Label(i_info,text="Price", font=("arial",12,"bold"),bg="white")
-        self.p_cat.grid(row=0,column=2,stick=W,padx=5,pady=2)
-        #price combobox
-        self.pri_com = ttk.Combobox(i_info, font=("arial",10),width=22)
-        self.pri_com.grid(row=0,column=3)
+        #rate
+        self.r_cat = Label(i_info,text="Rate", font=("arial",12,"bold"),bg="white")
+        self.r_cat.grid(row=0,column=2,stick=W,padx=5,pady=2)
+        #rate combobox
+        self.rat_com = ttk.Combobox(i_info, font=("arial",10),textvariable=self.rate,width=22)
+        self.rat_com.grid(row=0,column=3)
+
+        #Amount
+        self.a_cat = Label(i_info,text="Amount", font=("arial",12,"bold"),bg="white")
+        self.a_cat.grid(row=1,column=2,stick=W,padx=5,pady=2)
+        #amount combobox
+        self.pri_com = ttk.Combobox(i_info, font=("arial",10),textvariable=self.prices,width=22)
+        self.pri_com.grid(row=1,column=3)
 
         #quantity
         self.q_cat = Label(i_info,text="Quantity", font=("arial",12,"bold"),bg="white")
-        self.q_cat.grid(row=1,column=2,stick=W,padx=5,pady=2)
+        self.q_cat.grid(row=2,column=2,stick=W,padx=5,pady=2)
         #quantity
-        self.qua_com = ttk.Entry(i_info, font=("arial",10),width=24)
-        self.qua_com.grid(row=1,column=3)
+        self.qua_com = ttk.Entry(i_info, font=("arial",10),textvariable=self.qty,width=24)
+        self.qua_com.grid(row=2,column=3)
         #===================================#
 
         #============Bill search============#
@@ -123,10 +154,10 @@ class Bill_App:
         self.se = Label(rc,text="Search Bill", font=("arial",12,"bold"),bg="red",fg="white")
         self.se.grid(row=0,column=0,stick=W,padx=1)
         #search entry
-        self.sea_com = ttk.Entry(rc, font=("arial",10,"bold"),width=24)
+        self.sea_com = ttk.Entry(rc, font=("arial",10,"bold"),textvariable=self.search_bill,width=24)
         self.sea_com.grid(row=0,column=1,stick=W,padx=2,pady=2)
         #search botton
-        self.btn_s = Button(rc,text="Search", font=("arial",10,"bold"),bg="orangered",fg="white",width=15,cursor="hand2")
+        self.btn_s = Button(rc,text="Search",command=self.find_bill, font=("arial",10,"bold"),bg="orangered",fg="white",width=15,cursor="hand2")
         self.btn_s.grid(row=0,column=3)
         #===================================#
 
@@ -150,15 +181,15 @@ class Bill_App:
         self.t_cat = Label(bc,text="Total", font=("arial",12,"bold"),bg="white")
         self.t_cat.grid(row=0,column=0,stick=W,padx=5,pady=2)
         #toatl entry
-        self.tol_com = ttk.Entry(bc, font=("arial",10),width=24)
+        self.tol_com = ttk.Entry(bc, font=("arial",10),textvariable=self.total,width=24)
         self.tol_com.grid(row=0,column=1)
 
-        #Grand Total
+        '''#Grand Total
         self.gt = Label(bc,text="Grand Total", font=("arial",12,"bold"),bg="white")
         self.gt.grid(row=1,column=0,stick=W,padx=5,pady=2)
         #Grand total entry
         self.gat = ttk.Entry(bc, font=("arial",10),width=24)
-        self.gat.grid(row=1,column=1)
+        self.gat.grid(row=1,column=1)'''
         #===================================#
 
         #===============Button==============#
@@ -166,30 +197,33 @@ class Bill_App:
         bt.place(x=320,y=0)
 
         #cart
-        self.btn_ca = Button(bt,text="Add To Cart", font=("arial",15,"bold"),bg="orangered",fg="white",height=2,width=15,cursor="hand2")
+        self.btn_ca = Button(bt,text="Add To Cart",command=self.AddItem, font=("arial",15,"bold"),bg="orangered",fg="white",height=2,width=15,cursor="hand2")
         self.btn_ca.grid(row=0,column=0)
 
         #generate bill
-        self.btn_ge = Button(bt,text="Generate Bill", font=("arial",15,"bold"),bg="orangered",fg="white",height=2,width=15,cursor="hand2")
+        self.btn_ge = Button(bt,text="Generate Bill",command=self.gen_bill, font=("arial",15,"bold"),bg="orangered",fg="white",height=2,width=15,cursor="hand2")
         self.btn_ge.grid(row=0,column=1)
 
         #save bill
-        self.btn_sa = Button(bt,text="Save Bill", font=("arial",15,"bold"),bg="orangered",fg="white",height=2,width=15,cursor="hand2")
+        self.btn_sa = Button(bt,text="Save Bill",command=self.save_bill, font=("arial",15,"bold"),bg="orangered",fg="white",height=2,width=15,cursor="hand2")
         self.btn_sa.grid(row=0,column=3)
 
         #print
-        self.btn_pr = Button(bt,text="Print", font=("arial",15,"bold"),bg="orangered",fg="white",height=2,width=15,cursor="hand2")
+        self.btn_pr = Button(bt,text="Print",command=self.iprint, font=("arial",15,"bold"),bg="orangered",fg="white",height=2,width=15,cursor="hand2")
         self.btn_pr.grid(row=0,column=4)
 
-        #clear
-        self.btn_cl = Button(bt,text="Clear", font=("arial",15,"bold"),bg="orangered",fg="white",height=2,width=15,cursor="hand2")
+        #add new
+        self.btn_cl = Button(bt,text="Add New",command=self.add_new, font=("arial",15,"bold"),bg="orangered",fg="white",height=2,width=15,cursor="hand2")
         self.btn_cl.grid(row=0,column=5)
 
         #exit
-        self.btn_e = Button(bt,text="Exit", font=("arial",15,"bold"),bg="orangered",fg="white",height=2,width=15,cursor="hand2")
+        self.btn_e = Button(bt,text="Exit", font=("arial",15,"bold"),command=self.root.destroy,bg="orangered",fg="white",height=2,width=15,cursor="hand2")
         self.btn_e.grid(row=0,column=6)
-        #===================================#
 
+        #show it on bill area
+        self.welcome()
+        #===================================#
+        self.l=list()
         #===========Def funtion===============#
         #def for depending combobox
          #for snacks
@@ -202,7 +236,141 @@ class Bill_App:
             self.dri_com.config(value=self.s_drink)
             self.dri_com.current(0)   
 
+        #def function for price
+    def price(self,event=""):
+        #price for snacks
+        #price for nachos
+        if self.san_com.get() == "Nachos":
+            self.pri_com.config(value=self.price_nachos)
+            self.pri_com.current(0)
+            self.rat_com.config(value=self.price_nachos)
+            self.rat_com.current(0)
+            self.qty.set(1)
+        
+        #price for sandwhich
+        if self.san_com.get() == "Sandwhich":
+            self.pri_com.config(value=self.price_sandwhich)
+            self.pri_com.current(0)
+            self.rat_com.config(value=self.price_sandwhich)
+            self.rat_com.current(0)
+            self.qty.set(1)
+
+        #price for bhel
+        if self.san_com.get() == "Bhel":
+            self.pri_com.config(value=self.price_bhel)
+            self.pri_com.current(0)
+            self.rat_com.config(value=self.price_bhel)
+            self.rat_com.current(0)
+            self.qty.set(1)
+
+        #price for drinks
+        #price for coffee
+        if self.dri_com.get() == "Coffee":
+            self.pri_com.config(value=self.price_coffee)
+            self.pri_com.current(0)
+            self.rat_com.config(value=self.price_coffee)
+            self.rat_com.current(0)
+            self.qty.set(1)
+            
+    #bill area def function
+    def welcome(self):
+        self.textarea.delete(1.0,END)
+        #company name
+        self.textarea.insert(END,"\t\t\t Sip 'N' Snack")
+        #bill no.
+        self.textarea.insert(END,f"\n Bill no.: {self.bill_no.get()}")
+        #date
+        self.textarea.insert(END,f"\n Date: {self.date.get()}")
+        #time
+        self.textarea.insert(END,f"\n Time: {self.time.get()}")
+
+        #formating
+        self.textarea.insert(END,"\n==================================================")
+        self.textarea.insert(END,"\nItems\t\tQty\t\tRate\t\tAmount")
+        self.textarea.insert(END,"\n==================================================\n")
+
+        #self.textarea.insert(END,f"\n Total: {self.total.get()}")
+        
+    #add to cart def function    
+    def AddItem(self):
+        
+        self.n=int(self.pri_com.get())
+        self.m=int(self.qua_com.get())* self.n
+        self.l.append(self.m)
+        if self.san_com.get()=="" and self.dri_com.get()=="":
+            pass
+        else:
+            self.textarea.insert(END,f"{self.san_com.get()}{self.dri_com.get()}\t\t{self.qua_com.get()}\t\t{self.rat_com.get()}\t\t{self.m}\n")
+            self.total.set(str('Rs.%.2f'%(sum(self.l))))
+            self.san_com.set("")
+            self.dri_com.set("")
+            
     
+    #grenerating bill def function
+    def gen_bill(self):
+        if self.san_com.get()=="" and self.dri_com.get()=="":
+            text=self.textarea.get(8.0,(8.0+float(len(self.l))))
+            self.welcome()
+            self.textarea.insert(END,text)
+            self.textarea.insert(END,"\n==================================================")
+            self.textarea.insert(END,f"\nTotal:\t\t\t\t\t\t{self.total.get()}")
+            self.textarea.insert(END,"\n==================================================")
+        else:
+            text=self.textarea.get(8.0,(8.0+float(len(self.l))))
+            self.welcome()
+            self.textarea.insert(END,text)
+            self.textarea.insert(END,"\n==================================================")
+            self.textarea.insert(END,f"\nTotal:\t\t\t\t\t\t{self.total.get()}")
+            self.textarea.insert(END,"\n==================================================")
+    
+    #save def function
+    def save_bill(self):
+        op=messagebox.askyesno("Save Bill","Do you this Bill")
+        if op>0:
+            self.bill_data=self.textarea.get(1.0,END)
+            f1=open('data/'+str(self.bill_no.get())+".txt",'w')
+            f1.write(self.bill_data)
+            messagebox.showinfo("Bill saved",f"Bill no.: {self.bill_no.get()} saved successfully!")
+            f1.close()
+
+    #print def function
+    def iprint(self):
+        q=self.textarea.get(1.0,"end-1c")
+        filename=tempfile.mktemp('.txt')
+        open(filename,'w').write(q)
+        os.startfile(filename,"print")
+
+    #search bill def function
+    def find_bill(self):
+        found="no"
+        for i in os.listdir("data/"):
+            if i.split('.')[0]==self.search_bill.get():
+                f2=open(f'data/{i}','r')
+                self.textarea.delete(1.0,END)
+                for d in f2:
+                    self.textarea.insert(END,d)
+                f2.close()
+                found="yes"
+            if found=="no":
+                messagebox.showerror("Error","Invaild bill number")
+    
+    #add new def function
+    def add_new(self):
+        self.textarea.delete(8.0,END)
+        #random no. for bill generater
+        z = random.randint(100,99999)
+        self.bill_no.set(str(z))
+        self.date.set("")         #date
+        self.time.set("")         #time
+        self.search_bill.set("")  #search bill
+        self.product.set("")      #item
+        self.product2.set("")     #item2
+        self.rate.set("")         #rate
+        self.prices.set("")       #price
+        self.qty.set("")          #quantity
+        self.total.set("")        #total
+
+
         #=====================================#
 
 
