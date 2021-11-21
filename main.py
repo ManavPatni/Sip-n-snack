@@ -14,6 +14,17 @@ root.configure(bg="white")
 root.geometry('1520x790+0+0')
 root.resizable(False, False)
 
+#===========Def funtion===============#
+#=====================================#
+
+#==============Combobox List==========#
+m_category = ["Select Option","Snacks","Drinks"]
+
+s_snack = ["Select Snack","Nachos","Sandwhich","Bhel"]
+
+s_drink = ["Select Drink","Coffee"]
+#=====================================#
+
 #=================title================#
 main_title = Label(root, text="Sip 'N' Snack", font=("times new roman",30,"bold"),bg="white", fg="red")
 main_title.place(x=0,y=10,width=1530, height=49)
