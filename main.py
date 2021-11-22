@@ -7,6 +7,7 @@ from tkinter.font import BOLD
 import random,os
 from tkinter import messagebox
 import tempfile
+import webbrowser
 
 
 class Bill_App:
@@ -15,9 +16,13 @@ class Bill_App:
         root.title("Sip 'N' Snack")
         # window title
         root.configure(bg="white")
+        
         # geometry
-        root.geometry('1520x790+0+0')
+        root.geometry('1320x650+0+0')
         root.resizable(False, False)
+
+        def callback(url):
+           webbrowser.open_new(url)
 
         #========Variables====================#
         self.bill_no=StringVar()       #bill no.
@@ -57,12 +62,12 @@ class Bill_App:
 
         #=================title================#
         main_title = Label(self.root, text="Sip 'N' Snack", font=("times new roman",30,"bold"),bg="white", fg="red")
-        main_title.place(x=0,y=10,width=1530, height=49)
+        main_title.place(x=0,y=10,width=1330, height=39)
         #======================================#
 
         #==============main frame==============#
         main_frame = Frame(self.root,bd=2,relief=GROOVE,bg="white")
-        main_frame.place(x=10,y=100,width=1500,height=670)
+        main_frame.place(x=10,y=100,width=1300,height=525)
         #======================================#
 
         #===============other infomation=======#
@@ -94,7 +99,7 @@ class Bill_App:
 
         #=============Item information======#
         i_info = LabelFrame(main_frame,text="Item Info", font=("times new roman",12,"bold"),bg="white", fg="red")
-        i_info.place(x=370,y=5,width=600,height=140)
+        i_info.place(x=10,y=150,width=600,height=140)
 
         #main category
         self.m_cat = Label(i_info,text="Select Category", font=("arial",12,"bold"),bg="white")
@@ -148,7 +153,7 @@ class Bill_App:
 
         #============Bill search============#
         rc = Frame(main_frame,bd=2,bg="white" )
-        rc.place(x=1020, y=15,width=455,height=40)
+        rc.place(x=800, y=15,width=455,height=40)
         
         #search label
         self.se = Label(rc,text="Search Bill", font=("arial",12,"bold"),bg="red",fg="white")
@@ -163,7 +168,7 @@ class Bill_App:
 
         #===============Bill area=========#
         rl = LabelFrame(main_frame,text="Bill Area", font=("times new roman",12,"bold"),bg="white", fg="red")
-        rl.place(x=1000, y=45,width=480,height=490)
+        rl.place(x=800, y=45,width=480,height=470)
 
         #textarea and scroll bar for bill area
         self.scroll_y = Scrollbar(rl,orient=VERTICAL)
@@ -175,7 +180,7 @@ class Bill_App:
 
         #==========Billing Counter==========#
         bc = LabelFrame(main_frame,text="Billing Counter", font=("times new roman",12,"bold"),bg="white", fg="red")
-        bc.place(x=0, y=540,width=1496,height=125)
+        bc.place(x=10, y=294,width=600,height=125)
 
         #Total
         self.t_cat = Label(bc,text="Total", font=("arial",12,"bold"),bg="white")
@@ -193,37 +198,69 @@ class Bill_App:
         #===================================#
 
         #===============Button==============#
-        bt=Frame(bc,bd=2,bg="white")
-        bt.place(x=320,y=0)
+        bt=Frame(main_frame,bd=2,bg="white")
+        bt.place(x=620,y=0,width=175,height=500)
 
         #cart
-        self.btn_ca = Button(bt,text="Add To Cart",command=self.AddItem, font=("arial",15,"bold"),bg="orangered",fg="white",height=2,width=15,cursor="hand2")
+        self.btn_ca = Button(bt,text="Add To Cart",command=self.AddItem, font=("arial",15,"bold"),bg="orangered",fg="white",height=2,width=12,cursor="hand2")
         self.btn_ca.grid(row=0,column=0)
 
         #generate bill
-        self.btn_ge = Button(bt,text="Generate Bill",command=self.gen_bill, font=("arial",15,"bold"),bg="orangered",fg="white",height=2,width=15,cursor="hand2")
-        self.btn_ge.grid(row=0,column=1)
+        self.btn_ge = Button(bt,text="Generate Bill",command=self.gen_bill, font=("arial",15,"bold"),bg="orangered",fg="white",height=2,width=12,cursor="hand2")
+        self.btn_ge.grid(row=1,column=0,pady=5)
 
         #save bill
-        self.btn_sa = Button(bt,text="Save Bill",command=self.save_bill, font=("arial",15,"bold"),bg="orangered",fg="white",height=2,width=15,cursor="hand2")
-        self.btn_sa.grid(row=0,column=3)
+        self.btn_sa = Button(bt,text="Save Bill",command=self.save_bill, font=("arial",15,"bold"),bg="orangered",fg="white",height=2,width=12,cursor="hand2")
+        self.btn_sa.grid(row=2,column=0,pady=5)
 
         #print
-        self.btn_pr = Button(bt,text="Print",command=self.iprint, font=("arial",15,"bold"),bg="orangered",fg="white",height=2,width=15,cursor="hand2")
-        self.btn_pr.grid(row=0,column=4)
+        self.btn_pr = Button(bt,text="Print",command=self.iprint, font=("arial",15,"bold"),bg="orangered",fg="white",height=2,width=12,cursor="hand2")
+        self.btn_pr.grid(row=3,column=0,pady=5)
 
         #add new
-        self.btn_cl = Button(bt,text="Add New",command=self.add_new, font=("arial",15,"bold"),bg="orangered",fg="white",height=2,width=15,cursor="hand2")
-        self.btn_cl.grid(row=0,column=5)
+        self.btn_cl = Button(bt,text="Add New",command=self.add_new, font=("arial",15,"bold"),bg="orangered",fg="white",height=2,width=12,cursor="hand2")
+        self.btn_cl.grid(row=4,column=0,pady=5)
 
         #exit
-        self.btn_e = Button(bt,text="Exit", font=("arial",15,"bold"),command=self.root.destroy,bg="orangered",fg="white",height=2,width=15,cursor="hand2")
-        self.btn_e.grid(row=0,column=6)
+        self.btn_e = Button(bt,text="Exit", font=("arial",15,"bold"),command=self.root.destroy,bg="orangered",fg="white",height=2,width=12,cursor="hand2")
+        self.btn_e.grid(row=5,column=0,pady=5)
 
         #show it on bill area
         self.welcome()
         #===================================#
         self.l=list()
+
+        #============Tab frame============#
+        tf = Frame(self.root,bg="white")
+        tf.place(x=10,y=625,width=1300,height=25)
+
+        self.tabControl = ttk.Notebook(main_frame)
+
+        
+        #add item to category botton
+        btn_ad = ttk.Button(tf,text="Add Items",cursor="hand2",command=self.add)
+        btn_ad.grid(row=0,column=0)
+
+        #about btn
+        btn_abo = ttk.Button(tf,text="About",cursor="hand2",command=self.about_us)
+        btn_abo.grid(row=0,column=1)
+        
+        #created my label hyperlink
+        com_txt = Label(tf,text="This Software is created by FireFrame  /  A Deh Infotech Company", cursor="hand2",bg="white")
+        com_txt.place(x=500)
+        
+        # Bind the label with the URL to open in a new tab
+        com_txt.bind("<Button-1>", lambda e: callback('https://fireframe.godaddysites.com/'))
+        
+        #verision lable
+        ver_txt = Label(tf,text="Version:",bg="white")
+        ver_txt.place(x=1200)
+
+        #verision number label
+        ver_no = Label(tf,text="1.1.10",bg="white")
+        ver_no.place(x=1250)
+        #===================================#
+
         #===========Def funtion===============#
         #def for depending combobox
          #for snacks
@@ -370,7 +407,18 @@ class Bill_App:
         self.qty.set("")          #quantity
         self.total.set("")        #total
 
+    #hyperlink def function
+    def open_url(self,url):
+       webbrowser.open_new_tab(url)
 
+    #about def function
+    def about_us(self):
+        messagebox.showinfo("About Sip 'N' Snack",'''Software Name: Sip 'N' Snack\n Version: 1.1.10\n\n
+                              \n This Softwere is made by FireFrame, A Deh Infotech company.CEO/Owner of FireFrame Manav Patni has created this software.Manav Patni Student of SGI Junior College 11 A Commerce (2021-22). To create any kind of app for windows/mac/android/iphone contact Manav Patni or mail E-mail id:- help.fireframe.@gmail.com or visit our website. Website: https://fireframe.godaddysites.com/''')
+
+    #about def function
+    def add(self):
+        messagebox.showwarning("Coming Soon","We are currently working on it. This function will be coming soon")
         #=====================================#
 
 
