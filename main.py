@@ -7,7 +7,7 @@ from tkinter.font import BOLD
 import random,os
 from tkinter import messagebox
 import tempfile
-import webbrowser
+
 
 
 class Bill_App:
@@ -20,9 +20,6 @@ class Bill_App:
         # geometry
         root.geometry('1320x650+0+0')
         root.resizable(False, False)
-
-        def callback(url):
-           webbrowser.open_new(url)
 
         #========Variables====================#
         self.bill_no=StringVar()       #bill no.
@@ -151,6 +148,8 @@ class Bill_App:
         self.qua_com.grid(row=2,column=3)
         #===================================#
 
+        #===================================#
+
         #============Bill search============#
         rc = Frame(main_frame,bd=2,bg="white" )
         rc.place(x=800, y=15,width=455,height=40)
@@ -229,38 +228,6 @@ class Bill_App:
         self.welcome()
         #===================================#
         self.l=list()
-
-        #============Tab frame============#
-        tf = Frame(self.root,bg="white")
-        tf.place(x=10,y=625,width=1300,height=25)
-
-        self.tabControl = ttk.Notebook(main_frame)
-
-        
-        #add item to category botton
-        btn_ad = ttk.Button(tf,text="Add Items",cursor="hand2",command=self.add)
-        btn_ad.grid(row=0,column=0)
-
-        #about btn
-        btn_abo = ttk.Button(tf,text="About",cursor="hand2",command=self.about_us)
-        btn_abo.grid(row=0,column=1)
-        
-        #created my label hyperlink
-        com_txt = Label(tf,text="This Software is created by FireFrame  /  A Deh Infotech Company", cursor="hand2",bg="white")
-        com_txt.place(x=500)
-        
-        # Bind the label with the URL to open in a new tab
-        com_txt.bind("<Button-1>", lambda e: callback('https://fireframe.godaddysites.com/'))
-        
-        #verision lable
-        ver_txt = Label(tf,text="Version:",bg="white")
-        ver_txt.place(x=1200)
-
-        #verision number label
-        ver_no = Label(tf,text="1.1.10",bg="white")
-        ver_no.place(x=1250)
-        #===================================#
-
         #===========Def funtion===============#
         #def for depending combobox
          #for snacks
@@ -407,18 +374,7 @@ class Bill_App:
         self.qty.set("")          #quantity
         self.total.set("")        #total
 
-    #hyperlink def function
-    def open_url(self,url):
-       webbrowser.open_new_tab(url)
 
-    #about def function
-    def about_us(self):
-        messagebox.showinfo("About Sip 'N' Snack",'''Software Name: Sip 'N' Snack\n Version: 1.1.10\n\n
-                              \n This Softwere is made by FireFrame, A Deh Infotech company.CEO/Owner of FireFrame Manav Patni has created this software.Manav Patni Student of SGI Junior College 11 A Commerce (2021-22). To create any kind of app for windows/mac/android/iphone contact Manav Patni or mail E-mail id:- help.fireframe.@gmail.com or visit our website. Website: https://fireframe.godaddysites.com/''')
-
-    #about def function
-    def add(self):
-        messagebox.showwarning("Coming Soon","We are currently working on it. This function will be coming soon")
         #=====================================#
 
 
